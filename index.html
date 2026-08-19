@@ -241,6 +241,41 @@
             border-color: var(--success);
             color: white;
         }
+        
+        /* NEW: Floating Prompts Container */
+        .floating-prompts {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 1000;
+        }
+
+        .prompt-copy-btn {
+            background: #ffffff;
+            color: #8b5cf6;
+            border: 2px solid #8b5cf6;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .prompt-copy-btn:hover {
+            background: rgba(139, 92, 246, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(139, 92, 246, 0.2);
+        }
+
+        .prompt-copy-btn.copied {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
 
         @media (min-width: 600px) {
             .controls {
@@ -276,8 +311,103 @@
             <!-- Parts will be injected here by JS -->
         </div>
     </div>
+    
+    <!-- NEW: Floating Buttons for Prompts -->
+    <div class="floating-prompts">
+        <button class="prompt-copy-btn" onclick="copyPresetPrompt('prompt1', this)">3 Trscpt</button>
+        <button class="prompt-copy-btn" onclick="copyPresetPrompt('prompt2', this)">Notes to PDF</button>
+    </div>
 
     <script>
+        // --- NEW: Preset Prompts Data ---
+        const presetPrompts = {
+            'prompt1': `Create detailed vocabulary class notes from the following transcript. This transcript will be given to you in three parts across three messages. Follow these instructions strictly.
+Multi-Part Transcript Handling (3 parts)
+I will send Part 1, then Part 2, then Part 3 in separate messages. Treat all three as one single continuous lecture — the split is only due to input length, not because the lecture has three actual sections.
+After Part 1: produce notes for everything covered, labeled at the top as "Draft Notes — Part 1 of 3 (provisional, do not treat as final)." Do not run the mnemonic-completeness check and do not add ending sections yet. If Part 1 ends mid-topic (mid-table, mid-explanation, etc.), flag it explicitly at the bottom: "Continues in Part 2: [word/topic name]."
+After Part 2: do not restart from scratch. First complete whatever was left dangling from Part 1 using Part 2's content, then continue the same category structure/tables/numbering for new content in Part 2. Label this output "Draft Notes — Part 1+2 of 3 (provisional, do not treat as final)." Still do not run the mnemonic-completeness check or add ending sections. If Part 2 also ends mid-topic, flag it the same way: "Continues in Part 3: [word/topic name]."
+After Part 3: do not restart from scratch. First resolve anything left dangling from Part 2, then continue with any remaining new content in Part 3. Merge everything from all three parts into one single, final, complete document as if the transcript had never been split — do not repeat category headings unnecessarily where a category flows continuously across parts.
+Only after Part 3 is processed and merged: run the final mnemonic-completeness check (see Content Coverage below) across the entire combined lecture from all three parts, and only then add an ending section (Quick Revision/Homework) if the actual final content of the lecture calls for one.
+The Part 3 output should be the single, clean, final document — I should not have to manually stitch together Part 1, Part 2, and Part 3 myself.
+Top Priority — Mnemonics
+The single most important output of these notes is capturing every mnemonic/memory trick the teacher gives, exactly as spoken, for every word or concept. Do not paraphrase, shorten, drop, or "clean up" a mnemonic — write it in the same words, same Hinglish phrasing, and same imagery the teacher used. If a word has no mnemonic given, write "No mnemonic given" instead of silently skipping the column or inventing one. If the teacher gives multiple mnemonics or angles for the same word (e.g., a story version and a sound-alike version), include all of them, separated clearly. Before finalizing (i.e., only after Part 3), re-scan the entire combined transcript specifically for any mnemonic, memory hook, story, sound-alike trick, or visual association mentioned in passing, in humor, or outside the main word list — these are easy to miss and must be included.
+Overall Structure
+Follow the natural order of the lecture content. Do not impose a fixed template like overview, summary, or homework unless the teacher specifically gives them.
+If the teacher starts with general instructions or schedule, include them briefly at the top as "Class Instructions." If not, skip.
+Organize the main content by the categories the teacher teaches (e.g., root words, word of the day, synonyms/antonyms, idioms, phrasal verbs, spelling confusions, etc.). Use clear headings for each category.
+For each category, present words/concepts exactly as taught, with tables where appropriate.
+Formatting Rules for Words and Tables
+For each main word or phrase, give the main word, part of speech (if mentioned), main meaning in English, and its mnemonic on the same line/row — never separate a word from its mnemonic.
+For synonyms and antonyms, use a table with three columns: Word | Mnemonic (Hinglish, verbatim as taught) | Specific Note (nuance/distinction, only if the teacher gave one). Do not include a generic meaning column since synonyms/antonyms already relate to the main word.
+Do not merge "mnemonic" and "note" into one vague column — keep the mnemonic itself distinct and visible even if there's no extra note.
+Place confusing pairs, spelling traps, extra words, or clarifications inline right after the relevant word or table, and still capture their mnemonics if given.
+If the teacher gives extra related words (like "traitor" words), present them in a table with their own mnemonic column, not just a generic note.
+For phrasal verbs, idioms, one-word substitutions, homonyms, spelling confusions, etc., use tables with columns: Word/Phrase | Meaning | Mnemonic (if any given).
+For idioms, use: Idiom | Meaning | Mnemonic (if any given). Keep meanings short but clear.
+Language Rules
+Use English for all main meanings, table headers, and notes.
+Use Hinglish (Roman script, not Devanagari) inside mnemonics exactly as the teacher phrased them — do not translate mnemonics into pure English or over-formalize them.
+Do not use Devanagari script anywhere.
+Content Coverage
+Do not miss any word, mnemonic, memory trick, confusing pair, idiom, spelling trap, or concept mentioned across all three parts of the transcript. Mnemonics are exam-critical — treat any omission of a taught mnemonic as an error.
+If the teacher mentions a specific exam pattern or strategy (e.g., how to handle synonyms/antonyms in exams), include it as a note.
+Ending
+Only include a "Quick Revision" or "Homework" section if the teacher gives such instructions in the transcript. Otherwise, end after the last concept taught. As a final check before ending the Part 3 (final merged) output only, list any word from the entire combined transcript that has meaning but no mnemonic, so you can confirm none were accidentally dropped.`,
+            
+            'prompt2': `Convert these class notes into a printable PDF using this exact style. Treat every mnemonic, root breakdown, "don't confuse" pair, and idiom in the notes as mandatory content — none may be dropped, shortened beyond readability, or merged away to save space; if space is tight, shrink font or spacing first, never cut content.
+
+Flow and Pagination Logic (critical — read before laying out anything)
+Every entry is one atomic, indivisible unit: its heading (word + part of speech), meaning line, and its 💡 mnemonic line must always stay together in the same column and never split across a column or page break.
+Never place a heading (word heading, root heading, section heading, or table title) at the bottom of a column/page with its content starting on the next column/page. Before placing any heading, check whether the heading plus at least its first line of content fits in the remaining space of the current column — if not, push the entire heading + content block to the top of the next column/page instead of stranding the heading alone.
+"DON'T CONFUSE" callout boxes and root-word intro blocks (root name + core meaning) are always atomic — never split these; push the whole box to the next column/page if it doesn't fit.
+Tables (synonym, antonym, idiom) may split across a column/page break only if their header row (and title row, if present) repeats at the top of the continuation, and only after at least one data row has already been placed alongside the header on the same column/page. If not even one row fits, move the whole table to the next column/page instead of stranding a bare header.
+Never leave a column with unused vertical space greater than roughly one entry's height if a smaller entry from later content could fit there instead — reorder entry placement (not the logical word-by-word sequence of the notes) to fill gaps.
+Layout
+A4 page size, two-column layout throughout.
+Minimalistic, single-column-per-card content (no boxed borders around every entry) — clean numbered sections rather than heavy card boxes.
+Pure white background everywhere — no filled/shaded boxes, no background tints, low-ink for printing.
+Small consistent margins (~25–30pt) around the page and a small gap (~10pt) between the two columns so text never touches the page edge or column divider.
+Colors (exactly two accents, nothing else)
+Navy blue (#1a3a5c) — main title, section headers ("1 · Root Word: XXX"), word headings.
+Gold/mustard (#b8862b) — root-name subheadings, "DON'T CONFUSE" labels and box borders, idiom/table title rows.
+Table headers: green (#2e7d32) text/border for Synonyms table headers, red (#b03a2e) text/border for Antonyms table headers, gold for idiom/general tables — thin colored underline only, no filled backgrounds.
+Document structure
+Title block: Bold navy title naming the actual vocabulary theme (not generic), followed by an italic subtitle "Compiled class notes — mnemonics preserved verbatim."
+Numbered sections for each root word or topic, e.g. "1 · Root Word: MORT / MOR", followed by a gold subheading like MORT / MOR = "Death / Decay / Weakness", then an italic "Core meaning: ..." line.
+Word entries under each root: bold navy heading = Word (Part of Speech), plain meaning line directly below, then a 💡-emoji mnemonic line in italic directly below the meaning (only if the notes give one — omit the mnemonic line entirely if the notes say "no mnemonic given").
+"Related Distinctions & Confusing Pairs" subheading after a root's word list, followed by gold-bordered "DON'T CONFUSE" boxes for any flagged confusing pairs, and any general clarification notes as plain paragraphs.
+Synonym / Antonym tables: two columns — "Word" and "Memory Trick / Note" (merge the mnemonic and any nuance/distinction into one note column, separated by an em dash). Green header text/border for synonyms, red for antonyms. Give the table a bold gold title row above the header row when it stands alone as its own section (e.g., "Synonyms of BENEFICIAL (Useful, Healthy, Favorable)").
+Idiom tables: own subsection with a gold subheading (e.g., "A. Idioms for Generosity & Big-Heartedness"), table columns "Idiom / Phrase" and "Meaning / Mnemonic" (merged with an em dash), gold-accented header.
+Dual-meaning words (e.g., words with both an adjective and verb sense): give each sense its own short word-entry (heading + meaning + mnemonic), then attach syn/ant tables to the sense that has them.
+Additional standalone vocabulary: same word-entry format as above; still use "DON'T CONFUSE" boxes for any pairs the notes flag (e.g., similar-sounding but unrelated terms).
+Typography and spacing
+Body/table text ~7.5–8.5pt, headings ~9–11pt, section titles ~11–13pt, tight line spacing (leading ~1.25–1.3x font size).
+Keep total page count as low as possible without crowding, but never shrink text below ~7.5pt or truncate content to save space — follow the pagination logic above instead.
+File output
+Produce an actual downloadable PDF file, not text in chat.
+Name the file after the actual vocabulary theme/root words covered (e.g., "Vocabulary_Notes_MORT_VOR_DEM"), not a generic name like "notes" or "output".
+Include only the content from the notes given in that specific request — do not pull in or merge content from earlier notes/topics discussed in other conversations.`
+        };
+
+        function copyPresetPrompt(promptKey, button) {
+            const textToCopy = presetPrompts[promptKey];
+            
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const originalText = button.innerText;
+                button.innerText = 'Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.innerText = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy prompt: ', err);
+                alert('Failed to copy. Please check your browser permissions.');
+            });
+        }
+        // --- END NEW ---
+
         function splitTranscript() {
             const text = document.getElementById('main-transcript').value.trim();
             const outputContainer = document.getElementById('output-container');
