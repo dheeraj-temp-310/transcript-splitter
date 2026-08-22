@@ -355,38 +355,37 @@ Ending
 Only include a "Quick Revision" or "Homework" section if the teacher gives such instructions in the transcript. Otherwise, end after the last concept taught. As a final check before ending the Part 3 (final merged) output only, list any word from the entire combined transcript that has meaning but no mnemonic, so you can confirm none were accidentally dropped.`,
             
             'prompt2': `Convert these class notes into a printable PDF using this exact style. Treat every mnemonic, root breakdown, "don't confuse" pair, and idiom in the notes as mandatory content — none may be dropped, shortened beyond readability, or merged away to save space; if space is tight, shrink font or spacing first, never cut content.
-
-Flow and Pagination Logic (critical — read before laying out anything)
-Every entry is one atomic, indivisible unit: its heading (word + part of speech), meaning line, and its 💡 mnemonic line must always stay together in the same column and never split across a column or page break.
-Never place a heading (word heading, root heading, section heading, or table title) at the bottom of a column/page with its content starting on the next column/page. Before placing any heading, check whether the heading plus at least its first line of content fits in the remaining space of the current column — if not, push the entire heading + content block to the top of the next column/page instead of stranding the heading alone.
-"DON'T CONFUSE" callout boxes and root-word intro blocks (root name + core meaning) are always atomic — never split these; push the whole box to the next column/page if it doesn't fit.
-Tables (synonym, antonym, idiom) may split across a column/page break only if their header row (and title row, if present) repeats at the top of the continuation, and only after at least one data row has already been placed alongside the header on the same column/page. If not even one row fits, move the whole table to the next column/page instead of stranding a bare header.
-Never leave a column with unused vertical space greater than roughly one entry's height if a smaller entry from later content could fit there instead — reorder entry placement (not the logical word-by-word sequence of the notes) to fill gaps.
+Flow and Pagination Logic (critical — read before laying out any card)
+Every card is one atomic, indivisible unit: its heading (word + part of speech), meaning line, and any short inline mnemonic directly under it must always stay together in the same column and never split across a column or page break. Never place a heading at the bottom of a column/page and continue its content elsewhere.
+Before placing a card, calculate whether the full card height (heading + meaning + mnemonic, plus its border/margin) fits in the remaining vertical space of the current column. If it does not fit, move the entire card to the top of the next column/page — do not partially render it.
+Tables (synonyms, antonyms, idioms) are allowed to split across a column/page break only if their own header row repeats at the top of the continuation, and only after the card's heading + meaning has already been placed with at least one row of the table on the same page as the heading. If not even one row fits alongside the heading, move the whole card (heading + table) to the next column/page instead of stranding the heading alone.
+Root breakdown cards and "Don't confuse" callout boxes are always atomic (heading + full content together) — never split these, regardless of remaining space; push the entire box to the next column/page if it doesn't fit.
+Never leave a column with unused vertical space greater than roughly one card-height if a smaller card from later content could fit there instead — reorder card placement (not content order within a word's own structure) to fill gaps, as long as it doesn't break the logical word-by-word sequence of the notes.
 Layout
 A4 page size, two-column layout throughout.
-Minimalistic, single-column-per-card content (no boxed borders around every entry) — clean numbered sections rather than heavy card boxes.
+Minimalistic, formal, card-based sections: each word/concept sits in its own card with a thin light-gray border and a colored left accent bar (navy for synonym-only or general word cards, gold for root/idiom/mnemonic-focused cards).
 Pure white background everywhere — no filled/shaded boxes, no background tints, low-ink for printing.
-Small consistent margins (~25–30pt) around the page and a small gap (~10pt) between the two columns so text never touches the page edge or column divider.
 Colors (exactly two accents, nothing else)
-Navy blue (#1a3a5c) — main title, section headers ("1 · Root Word: XXX"), word headings.
-Gold/mustard (#b8862b) — root-name subheadings, "DON'T CONFUSE" labels and box borders, idiom/table title rows.
-Table headers: green (#2e7d32) text/border for Synonyms table headers, red (#b03a2e) text/border for Antonyms table headers, gold for idiom/general tables — thin colored underline only, no filled backgrounds.
-Document structure
-Title block: Bold navy title naming the actual vocabulary theme (not generic), followed by an italic subtitle "Compiled class notes — mnemonics preserved verbatim."
-Numbered sections for each root word or topic, e.g. "1 · Root Word: MORT / MOR", followed by a gold subheading like MORT / MOR = "Death / Decay / Weakness", then an italic "Core meaning: ..." line.
-Word entries under each root: bold navy heading = Word (Part of Speech), plain meaning line directly below, then a 💡-emoji mnemonic line in italic directly below the meaning (only if the notes give one — omit the mnemonic line entirely if the notes say "no mnemonic given").
-"Related Distinctions & Confusing Pairs" subheading after a root's word list, followed by gold-bordered "DON'T CONFUSE" boxes for any flagged confusing pairs, and any general clarification notes as plain paragraphs.
-Synonym / Antonym tables: two columns — "Word" and "Memory Trick / Note" (merge the mnemonic and any nuance/distinction into one note column, separated by an em dash). Green header text/border for synonyms, red for antonyms. Give the table a bold gold title row above the header row when it stands alone as its own section (e.g., "Synonyms of BENEFICIAL (Useful, Healthy, Favorable)").
-Idiom tables: own subsection with a gold subheading (e.g., "A. Idioms for Generosity & Big-Heartedness"), table columns "Idiom / Phrase" and "Meaning / Mnemonic" (merged with an em dash), gold-accented header.
-Dual-meaning words (e.g., words with both an adjective and verb sense): give each sense its own short word-entry (heading + meaning + mnemonic), then attach syn/ant tables to the sense that has them.
-Additional standalone vocabulary: same word-entry format as above; still use "DON'T CONFUSE" boxes for any pairs the notes flag (e.g., similar-sounding but unrelated terms).
+Navy blue (#1a3a5c) — headings, main word titles, primary emphasis.
+Gold/mustard (#b8862b) — secondary accents, root labels, idiom labels, callout box borders.
+Table headers use thin colored borders/text only, not filled backgrounds: green-ish (#2e7d32) text/border for Synonyms table headers, red-ish (#b03a2e) text/border for Antonyms table headers.
+Structure per word
+Word + part of speech (navy, bold).
+One-line English meaning directly below.
+Synonyms table: columns Word | Memory Trick / Note, green-bordered header.
+Antonyms table (only if the notes include antonyms for that word): columns Word | Memory Trick / Note, red-bordered header.
+"Don't confuse" callout: a bordered box (gold border) directly under the relevant word's card when the notes flag a commonly mixed-up pair — state both words and the distinguishing note.
+Root breakdowns (e.g., "LOQU = speak") shown as their own compact gold-accented card, not folded into a word card, since roots apply across multiple words.
+Idiom tables: Idiom | Meaning, placed in their own section/cards, not mixed into word cards.
+Any mnemonic not already inside a synonym/antonym table (e.g., attached directly to a root word or a standalone vocabulary word) must still appear, in italics, directly under that word's meaning line.
 Typography and spacing
-Body/table text ~7.5–8.5pt, headings ~9–11pt, section titles ~11–13pt, tight line spacing (leading ~1.25–1.3x font size).
-Keep total page count as low as possible without crowding, but never shrink text below ~7.5pt or truncate content to save space — follow the pagination logic above instead.
+Body/table text ~8–9pt, headings ~10–11pt, tight line spacing.
+Keep total page count as low as possible without crowding — allow a small consistent margin (~4–6pt) around each card so cards don't visually collide, and add a top-of-page or top-of-column gap so cards never touch the page edge or column divider.
+If a table would overflow a column height, follow the Flow and Pagination Logic above rather than shrinking text below ~8pt or truncating rows.
 File output
 Produce an actual downloadable PDF file, not text in chat.
-Name the file after the actual vocabulary theme/root words covered (e.g., "Vocabulary_Notes_MORT_VOR_DEM"), not a generic name like "notes" or "output".
-Include only the content from the notes given in that specific request — do not pull in or merge content from earlier notes/topics discussed in other conversations.`
+Name the file clearly after the topic covered in the notes (e.g., reflect the actual vocabulary theme, not a generic name like "notes" or "output").
+Include only the content from the notes I give you in this conversation turn — do not pull in or merge content from any earlier notes/topics discussed previously.`
         };
 
         function copyPresetPrompt(promptKey, button) {
